@@ -4,6 +4,7 @@ This Python program converts temperatures between Celsius, Fahrenheit, and Kelvi
 How to Run the Code:
 
 1. Save: Save the code as a .py file (e.g., temperature_converter.py).
-2. Open Terminal/Command Prompt: Navigate to the directory where you saved the file.
-3. Run: Execute the script using python temperature_converter.py.
-4. Follow Prompts: Enter the temperature and the original unit when prompted.
+2. make sure the import tkinter GUI
+3. Open Terminal/Command Prompt: Navigate to the directory where you saved the file.
+4. Run: Execute the script using python temperature_converter.py.
+5. Follow Prompts: Enter the temperature and the original unit when prompted.
