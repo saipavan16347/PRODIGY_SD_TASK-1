@@ -1,60 +1,69 @@
-def celsius_to_fahrenheit(celsius):
-  """Converts Celsius to Fahrenheit."""
-  return (celsius * 9/5) + 32
+import tkinter as tk
+from functools import partial
 
-def celsius_to_kelvin(celsius):
-  """Converts Celsius to Kelvin."""
-  return celsius + 273.15
+def store_temp(sel_temp):
+    global tempVal
+    tempVal = sel_temp
 
-def fahrenheit_to_celsius(fahrenheit):
-  """Converts Fahrenheit to Celsius."""
-  return (fahrenheit - 32) * 5/9
+def call_convert(rlabel1, rlabel2, inputn):
+    tem = inputn.get()
+    if not tem:
+        rlabel1.config(text="Please enter a temperature.")
+        rlabel2.config(text="")
+        return
+    try:
+        tem_float = float(tem)
+        if tempVal == 'Celsius':
+            f = (tem_float * 9 / 5) + 32
+            k = tem_float + 273.15
+            rlabel1.config(text="%.2f Fahrenheit" % f)
+            rlabel2.config(text="%.2f Kelvin" % k)
+        elif tempVal == 'Fahrenheit':
+            c = (tem_float - 32) * 5 / 9
+            k = c + 273.15
+            rlabel1.config(text="%.2f Celsius" % c)
+            rlabel2.config(text="%.2f Kelvin" % k)
+        elif tempVal == 'Kelvin':
+            c = tem_float - 273.15
+            f = (tem_float - 273.15) * 1.8 + 32
+            rlabel1.config(text="%.2f Celsius" % c)
+            rlabel2.config(text="%.2f Fahrenheit" % f)
+    except ValueError:
+        rlabel1.config(text="Invalid input. Please enter a number.")
+        rlabel2.config(text="")
 
-def fahrenheit_to_kelvin(fahrenheit):
-  """Converts Fahrenheit to Kelvin."""
-  return (fahrenheit - 32) * 5/9 + 273.15
+root = tk.Tk()
+root.geometry('500x350+350+200')
+root.title('Temperature Converter')
+root.configure(background='#09A3BA')
+root.resizable(width=False, height=False)
 
-def kelvin_to_celsius(kelvin):
-  """Converts Kelvin to Celsius."""
-  return kelvin - 273.15
+numberInput = tk.StringVar()
+var = tk.StringVar()
+tempVal = "Celsius" #initial value
 
-def kelvin_to_fahrenheit(kelvin):
-  """Converts Kelvin to Fahrenheit."""
-  return (kelvin - 273.15) * 9/5 + 32
+input_label = tk.Label(root, text="Enter temperature", background='#09A3BA', foreground="#FFFFFF")
+input_entry = tk.Entry(root, textvariable=numberInput)
+input_label.grid(row=1, column=0, padx=5, pady=5)
+input_entry.grid(row=1, column=1, padx=5, pady=5)
 
-def temperature_converter():
-  """Prompts the user for input and performs temperature conversion."""
+result_label_title = tk.Label(root, text="Converted to:", background='#09A3BA', foreground="#FFFFFF")
+result_label_title.grid(row=2, columnspan=2)
 
-  try:
-    temperature = float(input("Enter the temperature value: "))
-    unit = input("Enter the original unit (Celsius, Fahrenheit, or Kelvin): ").lower()
+result_label1 = tk.Label(root, background='#09A3BA', foreground="#FFFFFF")
+result_label1.grid(row=3, columnspan=2)
+result_label2 = tk.Label(root, background='#09A3BA', foreground="#FFFFFF")
+result_label2.grid(row=4, columnspan=2)
 
-    if unit == "celsius":
-      fahrenheit = celsius_to_fahrenheit(temperature)
-      kelvin = celsius_to_kelvin(temperature)
-      print(f"{temperature} degrees Celsius is equal to:")
-      print(f"{fahrenheit:.2f} degrees Fahrenheit")
-      print(f"{kelvin:.2f} Kelvin")
+dropDownList = ["Celsius", "Fahrenheit", "Kelvin"]
+dropdown = tk.OptionMenu(root, var, *dropDownList, command=store_temp)
+var.set(dropDownList[0])
+dropdown.grid(row=1, column=2, padx=5, pady=5)
+dropdown.config(background='#09A3BA', foreground="#FFFFFF")
+dropdown["menu"].config(background='#09A3BA', foreground="#FFFFFF")
 
-    elif unit == "fahrenheit":
-      celsius = fahrenheit_to_celsius(temperature)
-      kelvin = fahrenheit_to_kelvin(temperature)
-      print(f"{temperature} degrees Fahrenheit is equal to:")
-      print(f"{celsius:.2f} degrees Celsius")
-      print(f"{kelvin:.2f} Kelvin")
+call_convert = partial(call_convert, result_label1, result_label2, numberInput)
+result_button = tk.Button(root, text="Convert", command=call_convert, background='#09A3BA', foreground="#FFFFFF")
+result_button.grid(row=5, columnspan=3, padx=5, pady=5)
 
-    elif unit == "kelvin":
-      celsius = kelvin_to_celsius(temperature)
-      fahrenheit = kelvin_to_fahrenheit(temperature)
-      print(f"{temperature} Kelvin is equal to:")
-      print(f"{celsius:.2f} degrees Celsius")
-      print(f"{fahrenheit:.2f} degrees Fahrenheit")
-
-    else:
-      print("Invalid unit. Please enter Celsius, Fahrenheit, or Kelvin.")
-
-  except ValueError:
-    print("Invalid input. Please enter a valid number for the temperature.")
-
-if __name__ == "__main__":
-  temperature_converter()
+root.mainloop()
